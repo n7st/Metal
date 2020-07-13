@@ -4,9 +4,8 @@ package main
 import (
 	"github.com/sirupsen/logrus"
 
-	"github.com/n7st/rssirc/internal/app/rssbot"
-	"github.com/n7st/rssirc/internal/app/rssfeed"
-	"github.com/n7st/rssirc/internal/pkg/util"
+	"github.com/n7st/metal-core/internal/app/core"
+	"github.com/n7st/metal-core/internal/pkg/util"
 )
 
 // main sets up an IRC bot and many RSS feed pollers.
@@ -19,12 +18,7 @@ func main() {
 		"level": config.LogLevel.String(),
 	}).Info("Set log level")
 
-	bot := rssbot.Init(config, logger)
-
-	for _, rss := range config.RSS {
-		poller := rssfeed.NewPoller(rss, bot, logger)
-		poller.Poll()
-	}
+	bot := core.Init(config, logger)
 
 	bot.Connection.Loop()
 }

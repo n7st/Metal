@@ -1,8 +1,5 @@
-// Package rssbot is a simple IRC bot which connects to a single IRC network and
-// receives messages from the rssfeed package.
-//
-// This file sets up an IRC bot instance.
-package rssbot
+// Package metal is the base for a pluggable IRC bot.
+package metal
 
 import (
 	"crypto/tls"
@@ -11,7 +8,7 @@ import (
 	"github.com/sirupsen/logrus"
 	irc "github.com/thoj/go-ircevent"
 
-	"github.com/n7st/rssirc/internal/pkg/util"
+	"github.com/n7st/metal-core/internal/pkg/util"
 )
 
 // Bot contains the IRC bot.

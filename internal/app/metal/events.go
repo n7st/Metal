@@ -1,8 +1,5 @@
-// Package rssbot is a simple IRC bot which connects to a single IRC network and
-// receives messages from the rssfeed package.
-//
-// This file contains callback handlers for IRC numeric events.
-package rssbot
+// Package metal is the base for a pluggable IRC bot.
+package metal
 
 import irc "github.com/thoj/go-ircevent"
 

@@ -1,4 +1,4 @@
-module github.com/n7st/rssirc
+module github.com/n7st/metal-core
 
 go 1.14
 

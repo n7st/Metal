@@ -1,19 +1,19 @@
-# metal-core
+# Metal
 
-`metal-core` is a pluggable IRC bot.
+`metal` is a pluggable IRC bot.
 
 ## Installation
 
 ### Using a pre-compiled binary
 
 Download a binary for your system from the
-[releases page](https://github.com/n7st/metal-core/releases/).
+[releases page](https://github.com/n7st/metal/releases/).
 
 ## Configuration
 
 ### Linux
 
-Configuration is read from `$HOME/.config/netsplit/metal-core/config.yaml`.
+Configuration is read from `$HOME/.config/netsplit/metal/config.yaml`.
 
 ### Example configuration
 
@@ -23,13 +23,13 @@ Configuration is read from `$HOME/.config/netsplit/metal-core/config.yaml`.
 ## Running
 
 ```
-% metal-core
+% metal
 ```
 
 ### Optional custom config filename
 
 ```
-% metal-core path/to/config.yaml
+% metal path/to/config.yaml
 ```
 
 ## License

@@ -17,11 +17,11 @@ import (
 const (
 	configFilename  = "config.yaml" // These default values are used to create a
 	vendorName      = "netsplit"    // filename for loading a file from the
-	applicationName = "metal-core"      // platform's standard config location.
+	applicationName = "metal"       // platform's standard config location.
 
 	defaultCacheLen = 3
 	defaultPort     = 6667
-	defaultNickname = "metal-core"
+	defaultNickname = "metalbot"
 	defaultLogLevel = "info"
 )
 

@@ -4,8 +4,8 @@ package main
 import (
 	"github.com/sirupsen/logrus"
 
-	"github.com/n7st/metal-core/internal/app/core"
-	"github.com/n7st/metal-core/internal/pkg/util"
+	"github.com/n7st/metal/internal/app/metal"
+	"github.com/n7st/metal/internal/pkg/util"
 )
 
 // main sets up an IRC bot and many RSS feed pollers.
@@ -18,7 +18,7 @@ func main() {
 		"level": config.LogLevel.String(),
 	}).Info("Set log level")
 
-	bot := core.Init(config, logger)
+	bot := metal.Init(config, logger)
 
 	bot.Connection.Loop()
 }

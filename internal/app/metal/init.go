@@ -8,7 +8,7 @@ import (
 	"github.com/sirupsen/logrus"
 	irc "github.com/thoj/go-ircevent"
 
-	"github.com/n7st/metal-core/internal/pkg/util"
+	"github.com/n7st/metal/internal/pkg/util"
 )
 
 // Bot contains the IRC bot.

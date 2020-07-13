@@ -8,7 +8,7 @@ import (
 	"github.com/n7st/metal/internal/pkg/util"
 )
 
-// main sets up an IRC bot and many RSS feed pollers.
+// main sets up an IRC bot.
 func main() {
 	config := util.NewConfig()
 	logger := logrus.New()

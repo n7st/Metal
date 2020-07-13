@@ -1,5 +1,5 @@
 // Package util contains common functionality for "utilities" required by the
-// bot and feed poller.
+// bot.
 //
 // This file is for processing the application's configuration from a YAML file.
 package util
@@ -47,21 +47,10 @@ type ircConfig struct {
 	ReconnectDelayMinutes time.Duration
 }
 
-// RSSConfig contains config items specific to the RSS feed poller.
-type RSSConfig struct {
-	Channels   []string `yaml:"channels"`
-	FeedURL    string   `yaml:"feed_url"`
-	PollDelay  int      `yaml:"poll_delay"`
-	MaxHistory int      `yaml:"max_history"`
-
-	PollDelayMinutes time.Duration
-}
-
 // Config contains the entire application's configuration.
 type Config struct {
-	IRC              *ircConfig   `yaml:"irc"`
-	UnparsedLogLevel string       `yaml:"log_level"`
-	RSS              []*RSSConfig `yaml:"rss"`
+	IRC              *ircConfig `yaml:"irc"`
+	UnparsedLogLevel string     `yaml:"log_level"`
 
 	LogLevel logrus.Level
 }
@@ -145,18 +134,6 @@ func (c *Config) applyDefaults() {
 
 	if c.IRC.ReconnectDelay == 0 {
 		c.IRC.ReconnectDelay = 10
-	}
-
-	for _, poller := range c.RSS {
-		if poller.MaxHistory == 0 {
-			poller.MaxHistory = defaultCacheLen
-		}
-
-		if poller.PollDelay < 1 {
-			panic("the minimum poll delay is 1 minute")
-		}
-
-		poller.PollDelayMinutes = time.Minute * intToDuration(poller.PollDelay)
 	}
 
 	c.IRC.Hostname = fmt.Sprintf("%s:%d", c.IRC.Server, c.IRC.Port)

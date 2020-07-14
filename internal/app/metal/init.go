@@ -16,10 +16,11 @@ type Bot struct {
 	Connection *irc.Connection
 	Config     *util.Config
 	Logger     *logrus.Logger
+	Modules    []*util.Module
 }
 
 // Init sets up an IRC bot connection to the network.
-func Init(config *util.Config, logger *logrus.Logger) *Bot {
+func Init(config *util.Config, logger *logrus.Logger, modules []*util.Module) *Bot {
 	connection := irc.IRC(config.IRC.Nickname, config.IRC.Ident)
 
 	connection.Debug = config.IRC.Debug
@@ -39,7 +40,12 @@ func Init(config *util.Config, logger *logrus.Logger) *Bot {
 		}).Fatal("Fatal error connecting to IRC")
 	}
 
-	bot := &Bot{Connection: connection, Config: config, Logger: logger}
+	bot := &Bot{
+		Connection: connection,
+		Config:     config,
+		Logger:     logger,
+		Modules:    modules,
+	}
 
 	for name, fn := range events(bot) {
 		bot.Connection.AddCallback(name, fn)

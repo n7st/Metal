@@ -27,21 +27,22 @@ const (
 
 // ircConfig contains config items specific to the IRC bot itself.
 type ircConfig struct {
-	Channels         []string `yaml:"channels"`
-	Debug            bool     `yaml:"debug"`
-	Ident            string   `yaml:"ident"`
-	MaxReconnect     int      `yaml:"max_reconnect"`
-	ReconnectDelay   int      `yaml:"reconnect_delay"`
-	Modes            string   `yaml:"modes"`
-	Nickname         string   `yaml:"nickname"`
-	NickservAccount  string   `yaml:"nickserv_account"`
-	NickservPassword string   `yaml:"nickserv_password"`
-	Port             int      `yaml:"port"`
-	RealName         string   `yaml:"real_name"`
-	Server           string   `yaml:"server"`
-	ServerPassword   string   `yaml:"server_password"`
-	UseTLS           bool     `yaml:"use_tls"`
-	Verbose          bool     `yaml:"verbose"`
+	Channels         []string        `yaml:"channels"`
+	Debug            bool            `yaml:"debug"`
+	Ident            string          `yaml:"ident"`
+	MaxReconnect     int             `yaml:"max_reconnect"`
+	ReconnectDelay   int             `yaml:"reconnect_delay"`
+	Modes            string          `yaml:"modes"`
+	Nickname         string          `yaml:"nickname"`
+	NickservAccount  string          `yaml:"nickserv_account"`
+	NickservPassword string          `yaml:"nickserv_password"`
+	Port             int             `yaml:"port"`
+	RealName         string          `yaml:"real_name"`
+	Server           string          `yaml:"server"`
+	ServerPassword   string          `yaml:"server_password"`
+	UseTLS           bool            `yaml:"use_tls"`
+	Verbose          bool            `yaml:"verbose"`
+	Plugins          map[string]bool `yaml:"plugins"`
 
 	Hostname              string
 	ReconnectDelayMinutes time.Duration

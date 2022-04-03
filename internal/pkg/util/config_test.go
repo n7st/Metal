@@ -1,11 +1,12 @@
 package util
 
 import (
-	"fmt"
 	"io/ioutil"
 	"reflect"
 	"testing"
 	"time"
+
+	"github.com/sirupsen/logrus"
 )
 
 var noPluginIRCYaml = `---
@@ -23,7 +24,7 @@ irc:
   channels:
     - '##Metal'
 
-log_level: 'debug'
+log_level: 'info'
 `
 
 var noPluginIRCConfig = &Config{
@@ -32,7 +33,7 @@ var noPluginIRCConfig = &Config{
 		Debug:            false,
 		Ident:            "Metal",
 		MaxReconnect:     5,
-		ReconnectDelay:   10,
+		ReconnectDelay:   time.Duration(600 * time.Second),
 		Modes:            "+b",
 		Nickname:         "Metal",
 		NickservAccount:  "myaccount",
@@ -44,9 +45,11 @@ var noPluginIRCConfig = &Config{
 		UseTLS:           true,
 		Verbose:          false,
 
-		Hostname:              "irc.somewhere.org 6697",
-		ReconnectDelayMinutes: time.Duration(10),
+		Hostname: "irc.somewhere.org:6697",
 	},
+	Plugins:          make(map[string]*pluginConfig),
+	UnparsedLogLevel: "info",
+	LogLevel:         logrus.InfoLevel,
 }
 
 func TestNewConfig(t *testing.T) {
@@ -69,7 +72,6 @@ func TestNewConfig(t *testing.T) {
 			ioutil.WriteFile(filename, data, 0777)
 
 			if got := NewConfig(filename); !reflect.DeepEqual(got, tt.want) {
-				fmt.Printf("%v", got)
 				t.Errorf("NewConfig() got = %v, want = %v", got, tt.want)
 			}
 		})

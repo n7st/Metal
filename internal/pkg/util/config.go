@@ -25,24 +25,29 @@ const (
 	defaultLogLevel = "info"
 )
 
+// pluginConfig contains plugin-specific configuration.
+type pluginConfig struct {
+	Name    string
+	Options map[string]interface{}
+}
+
 // ircConfig contains config items specific to the IRC bot itself.
 type ircConfig struct {
-	Channels         []string        `yaml:"channels"`
-	Debug            bool            `yaml:"debug"`
-	Ident            string          `yaml:"ident"`
-	MaxReconnect     int             `yaml:"max_reconnect"`
-	ReconnectDelay   int             `yaml:"reconnect_delay"`
-	Modes            string          `yaml:"modes"`
-	Nickname         string          `yaml:"nickname"`
-	NickservAccount  string          `yaml:"nickserv_account"`
-	NickservPassword string          `yaml:"nickserv_password"`
-	Port             int             `yaml:"port"`
-	RealName         string          `yaml:"real_name"`
-	Server           string          `yaml:"server"`
-	ServerPassword   string          `yaml:"server_password"`
-	UseTLS           bool            `yaml:"use_tls"`
-	Verbose          bool            `yaml:"verbose"`
-	Plugins          map[string]bool `yaml:"plugins"`
+	Channels         []string `yaml:"channels"`
+	Debug            bool     `yaml:"debug"`
+	Ident            string   `yaml:"ident"`
+	MaxReconnect     int      `yaml:"max_reconnect"`
+	ReconnectDelay   int      `yaml:"reconnect_delay"`
+	Modes            string   `yaml:"modes"`
+	Nickname         string   `yaml:"nickname"`
+	NickservAccount  string   `yaml:"nickserv_account"`
+	NickservPassword string   `yaml:"nickserv_password"`
+	Port             int      `yaml:"port"`
+	RealName         string   `yaml:"real_name"`
+	Server           string   `yaml:"server"`
+	ServerPassword   string   `yaml:"server_password"`
+	UseTLS           bool     `yaml:"use_tls"`
+	Verbose          bool     `yaml:"verbose"`
 
 	Hostname              string
 	ReconnectDelayMinutes time.Duration
@@ -50,8 +55,9 @@ type ircConfig struct {
 
 // Config contains the entire application's configuration.
 type Config struct {
-	IRC              *ircConfig `yaml:"irc"`
-	UnparsedLogLevel string     `yaml:"log_level"`
+	IRC              *ircConfig      `yaml:"irc"`
+	Plugins          []*pluginConfig `yaml:"plugins"`
+	UnparsedLogLevel string          `yaml:"log_level"`
 
 	LogLevel logrus.Level
 }

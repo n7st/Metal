@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-for file in ./internal/app/plugins/**/*.go;
+shopt -s extglob;
+
+for file in ./internal/app/plugins/**/!(*_test*).go;
 do
     PLUGIN=$(basename $(dirname $file));
     go build -buildmode=plugin -o ./plugins/${PLUGIN}.so $file;

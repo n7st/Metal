@@ -25,9 +25,7 @@ type Plugin interface {
 func CheckImplementsInterface(t *testing.T, plugin interface{}) {
 	var i interface{} = plugin
 
-	_, ok := i.(Plugin)
-
-	if !ok {
+	if _, ok := i.(Plugin); !ok {
 		t.Error("plugin does not implement the Plugin interface")
 	}
 }

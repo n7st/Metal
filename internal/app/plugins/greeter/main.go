@@ -52,8 +52,16 @@ func (h greeter) helloWorld(c *command.Command) *command.Response {
 	if h.greetingPermitted(c.Username) {
 		h.logGreeted(c.Username)
 
+		who := "world"
+
+		// c.Argument (string) and c.Arguments ([]string{}) can be used to
+		// determine the output of your command
+		if c.Argument != "" {
+			who = c.Argument
+		}
+
 		return &command.Response{
-			Message: "Hello, world",
+			Message: "Hello, " + who,
 		}
 	}
 

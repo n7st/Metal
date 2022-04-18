@@ -30,6 +30,7 @@ log_level: 'info'
 var noPluginIRCConfig = &Config{
 	IRC: &ircConfig{
 		Channels:         []string{"##Metal"},
+		CommandTrigger:   "!",
 		Debug:            false,
 		Ident:            "Metal",
 		MaxReconnect:     5,

@@ -19,7 +19,6 @@ const (
 	vendorName      = "netsplit"    // filename for loading a file from the
 	applicationName = "metal"       // platform's standard config location.
 
-	defaultCacheLen = 3
 	defaultPort     = 6667
 	defaultNickname = "metalbot"
 	defaultLogLevel = "info"

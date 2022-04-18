@@ -77,7 +77,7 @@ func (h greeter) greetingPermitted(username string) bool {
 	defer h.rwm.RUnlock()
 
 	if lastGreeted := h.recentlyGreeted[username]; lastGreeted != nil {
-		if diff := time.Now().Sub(*lastGreeted); diff >= time.Minute {
+		if time.Since(*lastGreeted) >= time.Minute {
 			return true
 		}
 	} else {

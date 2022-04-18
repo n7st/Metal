@@ -16,6 +16,7 @@ type Bot struct {
 	Connection *irc.Connection
 	Config     *util.Config
 	Logger     *logrus.Logger
+	Plugins    []*util.Plugin
 }
 
 // Init sets up an IRC bot connection to the network.
@@ -40,6 +41,19 @@ func Init(config *util.Config, logger *logrus.Logger) *Bot {
 	}
 
 	bot := &Bot{Connection: connection, Config: config, Logger: logger}
+
+	plugins, errors := util.LoadPlugins([]string{
+		"/home/mike/go/src/github.com/n7st/metal/plugins/greeter.so",
+		"/home/mike/go/src/github.com/n7st/metal/plugins/ping.so",
+	})
+
+	if len(errors) > 0 {
+		for _, err := range errors {
+			logger.Println(err)
+		}
+	}
+
+	bot.Plugins = plugins
 
 	for name, fn := range events(bot) {
 		bot.Connection.AddCallback(name, fn)

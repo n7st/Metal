@@ -22,6 +22,8 @@ const (
 	defaultPort     = 6667
 	defaultNickname = "metalbot"
 	defaultLogLevel = "info"
+
+	defaultCommandTrigger = "!"
 )
 
 // pluginConfig contains plugin-specific configuration.
@@ -33,6 +35,7 @@ type pluginConfig struct {
 // ircConfig contains config items specific to the IRC bot itself.
 type ircConfig struct {
 	Channels         []string      `yaml:"channels"`
+	CommandTrigger   string        `yaml:"command_trigger"`
 	Debug            bool          `yaml:"debug"`
 	Ident            string        `yaml:"ident"`
 	MaxReconnect     int           `yaml:"max_reconnect"`
@@ -141,6 +144,10 @@ func (c *Config) applyDefaults() {
 
 	if c.IRC.ReconnectDelay == 0 {
 		c.IRC.ReconnectDelay = time.Duration(600 * time.Second)
+	}
+
+	if c.IRC.CommandTrigger == "" {
+		c.IRC.CommandTrigger = defaultCommandTrigger
 	}
 
 	c.IRC.Hostname = fmt.Sprintf("%s:%d", c.IRC.Server, c.IRC.Port)

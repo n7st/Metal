@@ -23,14 +23,18 @@ type Plugin struct {
 func (p *Plugin) Run(c *command.Command) []*command.Response {
 	var output []*command.Response
 
-	for instruction, function := range p.Contrib.Commands() {
-		if instruction == c.Command {
-			response := function(c)
-
-			if response != nil {
-				output = append(output, response)
+	if c.Command != "" {
+		for instruction, function := range p.Contrib.Commands() {
+			if instruction == c.Command {
+				if response := function(c); response != nil {
+					output = append(output, response)
+				}
 			}
 		}
+	}
+
+	if parsed := p.Contrib.Parse(c); parsed != nil {
+		output = append(output, parsed)
 	}
 
 	return output

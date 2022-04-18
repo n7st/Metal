@@ -19,11 +19,11 @@ const (
 	vendorName      = "netsplit"    // filename for loading a file from the
 	applicationName = "metal"       // platform's standard config location.
 
-	defaultPort     = 6667
-	defaultNickname = "metalbot"
-	defaultLogLevel = "info"
-
+	defaultPort           = 6667
+	defaultNickname       = "metalbot"
+	defaultLogLevel       = "info"
 	defaultCommandTrigger = "!"
+	defaultMaxReconnect   = 3
 )
 
 // pluginConfig contains plugin-specific configuration.
@@ -148,6 +148,10 @@ func (c *Config) applyDefaults() {
 
 	if c.IRC.CommandTrigger == "" {
 		c.IRC.CommandTrigger = defaultCommandTrigger
+	}
+
+	if c.IRC.MaxReconnect == 0 {
+		c.IRC.MaxReconnect = defaultMaxReconnect
 	}
 
 	c.IRC.Hostname = fmt.Sprintf("%s:%d", c.IRC.Server, c.IRC.Port)

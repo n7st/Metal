@@ -170,3 +170,15 @@ func (c *Config) setLogLevel() {
 
 	c.LogLevel = level
 }
+
+func (c *Config) EnabledPlugins() []string {
+	var enabledPlugins []string
+
+	// TODO: check for an "enabled" option, don't append if it exists and isn't
+	// truthy
+	for filepath := range c.Plugins {
+		enabledPlugins = append(enabledPlugins, filepath)
+	}
+
+	return enabledPlugins
+}

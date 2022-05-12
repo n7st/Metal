@@ -16,6 +16,3 @@
 
 # Linux binary
 metal
-
-# Temporary: plugin testing
-metal_plugins.go

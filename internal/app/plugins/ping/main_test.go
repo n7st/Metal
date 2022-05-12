@@ -16,14 +16,6 @@ func TestCommands(t *testing.T) {
 	plugin.CheckRunCommand(t, NewPlugin(), "ping", &command.Command{})
 }
 
-func TestParse(t *testing.T) {
-	pinger := NewPlugin()
-
-	if pinger.Parse(&command.Command{}) != nil {
-		t.Fail()
-	}
-}
-
 func TestPingCommand(t *testing.T) {
 	expected := &command.Response{Message: "Pong!"}
 

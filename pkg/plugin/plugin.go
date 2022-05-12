@@ -10,14 +10,14 @@ import (
 // matched against user-provided commands.
 type CommandFunction func(*command.Command) *command.Response
 
-// Plugin defines the interface for a bot plugin.
+// Plugin defines the interface for a bot plugin. They may optionally implement
+// three different functions:
+// * Commands() map[string]plugin.CommandFunction - returns a list of commands
+//   to the functions they trigger.
+// * Parse(*command.Command) - for general purpose text processing (rather than
+//   a specific command).
+// * Timer() - for additional "timed" functions, e.g. a ticker in a goroutine.
 type Plugin interface {
-	// Commands returns a list of the plugin's available commands against the
-	// functions they must run.
-	Commands() map[string]CommandFunction
-
-	// Parse parses the input message
-	Parse(*command.Command) *command.Response
 }
 
 // CheckImplementsPluginInterface ensures a given plugin meets the Plugin
@@ -30,13 +30,37 @@ func CheckImplementsInterface(t *testing.T, plugin interface{}) {
 	}
 }
 
-// CheckRunCommands ensures a given plugin can run a named command.
-func CheckRunCommand(t *testing.T, plugin Plugin, name string, input *command.Command) *command.Response {
-	function := plugin.Commands()[name]
+// TODO: add "Commander", "Timer", "Parser" functions here with the weird optional
+// interface thingies?
 
-	if function == nil {
-		t.Errorf("No such command available: %s", name)
+// CheckRunCommand ensures a given plugin can run a named command. This is a
+// helper for plugin tests.
+func CheckRunCommand(t *testing.T, plugin Plugin, name string, input *command.Command) *command.Response {
+	response := &command.Response{}
+
+	if commander, ok := plugin.(interface {
+		Commands() map[string]CommandFunction
+	}); ok {
+		function := commander.Commands()[name]
+
+		if function == nil {
+			t.Errorf("No such command available: %s", name)
+		}
+
+		response = function(input)
 	}
 
-	return function(input)
+	return response
+}
+
+func CheckRunParse(t *testing.T, plugin Plugin, input *command.Command) *command.Response {
+	response := &command.Response{}
+
+	if parser, ok := plugin.(interface {
+		Parse(c *command.Command) *command.Response
+	}); ok {
+		response = parser.Parse(input)
+	}
+
+	return response
 }

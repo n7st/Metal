@@ -42,10 +42,14 @@ func Init(config *util.Config, logger *logrus.Logger) *Bot {
 
 	bot := &Bot{Connection: connection, Config: config, Logger: logger}
 
-	plugins, errors := util.LoadPlugins([]string{
-		"/home/mike/go/src/github.com/n7st/metal/plugins/greeter.so",
-		"/home/mike/go/src/github.com/n7st/metal/plugins/ping.so",
-	})
+	plugins, errors := util.LoadPlugins(config.EnabledPlugins())
+
+	for _, p := range plugins {
+		// Plugins may run on a ticker a goroutine; start them
+		if timer, ok := p.Contrib.(interface{ Timer() }); ok {
+			timer.Timer()
+		}
+	}
 
 	if len(errors) > 0 {
 		for _, err := range errors {

@@ -17,12 +17,12 @@ func TestCommands(t *testing.T) {
 }
 
 func TestParse(t *testing.T) {
-	greeter := NewPlugin()
-
 	t.Run("Message contains 'hi'", func(t *testing.T) {
 		input := &command.Command{Message: "test hi test"}
 
-		if !reflect.DeepEqual(greeter.Parse(input), &command.Response{Message: "Hi!"}) {
+		response := plugin.CheckRunParse(t, NewPlugin(), input)
+
+		if reflect.DeepEqual(response, &command.Response{Message: "hi"}) {
 			t.Fail()
 		}
 	})
@@ -30,7 +30,9 @@ func TestParse(t *testing.T) {
 	t.Run("Message doesn't contain 'hi'", func(t *testing.T) {
 		input := &command.Command{Message: "test test"}
 
-		if greeter.Parse(input) != nil {
+		response := plugin.CheckRunParse(t, NewPlugin(), input)
+
+		if response != nil {
 			t.Fail()
 		}
 	})

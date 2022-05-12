@@ -29,7 +29,8 @@ const (
 // pluginConfig contains plugin-specific configuration.
 type pluginConfig struct {
 	Name    string
-	Options map[string]interface{}
+	Enabled bool                   `yaml:"enabled"`
+	Options map[string]interface{} `yaml:"options"`
 }
 
 // ircConfig contains config items specific to the IRC bot itself.
@@ -174,10 +175,10 @@ func (c *Config) setLogLevel() {
 func (c *Config) EnabledPlugins() []string {
 	var enabledPlugins []string
 
-	// TODO: check for an "enabled" option, don't append if it exists and isn't
-	// truthy
 	for filepath := range c.Plugins {
-		enabledPlugins = append(enabledPlugins, filepath)
+		if c.Plugins[filepath].Enabled {
+			enabledPlugins = append(enabledPlugins, filepath)
+		}
 	}
 
 	return enabledPlugins

@@ -12,7 +12,10 @@ import (
 func events(b *Bot) map[string]func(e *irc.Event) {
 	return map[string]func(e *irc.Event){
 		"001":     b.callback001,
-		"privmsg": b.callbackPrivmsg,
+		"PRIVMSG": b.callbackPrivmsg,
+		"JOIN":    b.callbackJoin,
+		"KICK":    b.callbackKick,
+		"PART":    b.callbackPart,
 	}
 }
 
@@ -39,8 +42,40 @@ func (b *Bot) callbackPrivmsg(e *irc.Event) {
 		output := p.Run(command)
 
 		for _, o := range output {
-			b.Connection.Privmsg(e.Arguments[0], o.Message)
+			if looksLikeChannel(e.Arguments[0]) {
+				b.MessageChannel(e.Arguments[0], o.Message)
+			} else {
+				b.Connection.Privmsg(e.Arguments[0], o.Message)
+			}
 		}
+	}
+}
+
+func (b *Bot) callbackJoin(e *irc.Event) {
+	b.storeChannelStatus(e, true)
+}
+
+func (b *Bot) callbackPart(e *irc.Event) {
+	b.storeChannelStatus(e, false)
+}
+
+func (b *Bot) callbackKick(e *irc.Event) {
+	b.storeChannelStatus(e, false)
+}
+
+func (b *Bot) storeChannelStatus(e *irc.Event, onChannel bool) {
+	b.ChannelsMutex.RLock()
+
+	defer b.ChannelsMutex.RUnlock()
+
+	channel := e.Arguments[0]
+
+	if b.Config.IRC.Debug {
+		b.Logger.Infof("Setting bot's channel presence for %s to %t", channel, onChannel)
+	}
+
+	if e.Nick == b.Connection.GetNick() {
+		b.Channels[channel] = onChannel
 	}
 }
 
@@ -72,4 +107,8 @@ func (b *Bot) messageToCommandArguments(message string) (string, []string) {
 	}
 
 	return command, arguments
+}
+
+func looksLikeChannel(input string) bool {
+	return strings.HasPrefix(input, "#")
 }

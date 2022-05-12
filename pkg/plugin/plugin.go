@@ -30,9 +30,6 @@ func CheckImplementsInterface(t *testing.T, plugin interface{}) {
 	}
 }
 
-// TODO: add "Commander", "Timer", "Parser" functions here with the weird optional
-// interface thingies?
-
 // CheckRunCommand ensures a given plugin can run a named command. This is a
 // helper for plugin tests.
 func CheckRunCommand(t *testing.T, plugin Plugin, name string, input *command.Command) *command.Response {
@@ -53,6 +50,8 @@ func CheckRunCommand(t *testing.T, plugin Plugin, name string, input *command.Co
 	return response
 }
 
+// CheckRunParse ensures a given plugin can run the "Parse" function. This is a
+// helper for plugin tests.
 func CheckRunParse(t *testing.T, plugin Plugin, input *command.Command) *command.Response {
 	response := &command.Response{}
 

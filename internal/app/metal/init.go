@@ -3,6 +3,7 @@ package metal
 
 import (
 	"crypto/tls"
+	"sync"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -17,6 +18,9 @@ type Bot struct {
 	Config     *util.Config
 	Logger     *logrus.Logger
 	Plugins    []*util.Plugin
+
+	Channels      map[string]bool
+	ChannelsMutex *sync.RWMutex
 }
 
 // Init sets up an IRC bot connection to the network.
@@ -40,7 +44,8 @@ func Init(config *util.Config, logger *logrus.Logger) *Bot {
 		}).Fatal("Fatal error connecting to IRC")
 	}
 
-	bot := &Bot{Connection: connection, Config: config, Logger: logger}
+	bot := &Bot{Connection: connection, Config: config, Logger: logger, ChannelsMutex: &sync.RWMutex{}}
+	bot.Channels = make(map[string]bool)
 
 	plugins, errors := util.LoadPlugins(config.EnabledPlugins())
 
@@ -84,12 +89,32 @@ func (b *Bot) joinChannels(params ...string) {
 	}
 }
 
+func (b *Bot) IsOnChannel(channel string) bool {
+	b.ChannelsMutex.RLock()
+
+	defer b.ChannelsMutex.RUnlock()
+
+	return b.Channels[channel]
+}
+
 // MessageChannels sends one message to many channels.
 func (b *Bot) MessageChannels(channels []string, message string) {
 	for _, channel := range channels {
-		b.Connection.Privmsg(channel, message)
+		b.MessageChannel(channel, message)
 
 		time.Sleep(1 * time.Second) // Antispam
+	}
+}
+
+func (b *Bot) MessageChannel(channel string, message string) {
+	if b.Config.IRC.Debug {
+		b.Logger.Infof("Attempting to message channel %s with message %s", channel, message)
+	}
+
+	if b.IsOnChannel(channel) {
+		b.Connection.Privmsg(channel, message)
+	} else {
+		b.Logger.Warnf("Tried to message channel %s with message %s, but I'm not in it", channel, message)
 	}
 }
 

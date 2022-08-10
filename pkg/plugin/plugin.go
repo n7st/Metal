@@ -12,11 +12,11 @@ type CommandFunction func(*command.Command) *command.Response
 
 // Plugin defines the interface for a bot plugin. They may optionally implement
 // three different functions:
-// * Commands() map[string]plugin.CommandFunction - returns a list of commands
-//   to the functions they trigger.
-// * Parse(*command.Command) - for general purpose text processing (rather than
-//   a specific command).
-// * Timer() - for additional "timed" functions, e.g. a ticker in a goroutine.
+//   - Commands() map[string]plugin.CommandFunction - returns a list of commands
+//     to the functions they trigger.
+//   - Parse(*command.Command) - for general purpose text processing (rather than
+//     a specific command).
+//   - Timer() - for additional "timed" functions, e.g. a ticker in a goroutine.
 type Plugin interface {
 }
 

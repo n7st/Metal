@@ -1,6 +1,6 @@
 module github.com/n7st/metal
 
-go 1.18
+go 1.19
 
 require (
 	github.com/shibukawa/configdir v0.0.0-20170330084843-e180dbdc8da0
